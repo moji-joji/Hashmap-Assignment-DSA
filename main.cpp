@@ -1,5 +1,5 @@
 #include <iostream>
-#define tableSize 100
+#define tableSize 10
 
 using namespace std;
 
@@ -46,49 +46,79 @@ public:
     void deleteData2(string key);
 };
 
+// int main()
+
+// {
+
+//     // table 1 for quadratic probing
+
+//     HashTable table1;
+
+//     table1.insertData("happy", 1);
+
+//     table1.insertData("money", 2);
+
+//     table1.insertData("sad", 3);
+
+//     table1.insertData("train", 4);
+
+//     table1.insertData("fire", 5);
+
+//     table1.insertData("cook", 6);
+
+//     cout << "Value of cook in lexicon is " << table1.getData("cook") << endl;
+
+//     table1.printEntireTable();
+
+//     cout << "Deleting \'cook\'  " << endl;
+
+//     table1.deleteData("cook");
+
+//     table1.printEntireTable();
+
+//     cout << endl;
+
+//     return 0;
+// }
+
 int main()
+
 {
 
     // table 1 for quadratic probing
+
     HashTable table1;
 
     // table2 for double hashing
+
     HashTable table2;
 
-    table1.insertData("happy", 1);
-    table1.insertData("money", 2);
-    table1.insertData("sad", 3);
-    table1.insertData("train", 4);
-    table1.insertData("fire", 5);
-    table1.insertData("cook", 6);
-
-    cout << "Value of cook in lexicon is " << table1.getData("cook") << endl;
-    table1.printEntireTable();
-
-    cout << "Deleting \'cook\'  " << endl;
-    table1.deleteData("cook");
-
-    table1.printEntireTable();
-
     table2.insertData2("man", 7);
+
     table2.insertData2("car", 8);
+
     table2.insertData2("war", 9);
+
     table2.insertData2("food", 10);
+
     table2.insertData2("tree", 11);
+
     table2.insertData2("break", 12);
 
-    cout << "Value of war in lexicon is " << table2.getData("war") << endl;
+    cout << "Value of war in lexicon is " << table2.getData2("war") << endl;
+
     table2.printEntireTable();
 
-    cout << "Deleting \'wae\'  " << endl;
+    cout << "Deleting \'war\'  " << endl;
+
     table2.deleteData2("war");
 
     table2.printEntireTable();
 
     cout << endl;
+
     return 0;
 }
-
 HashTable::HashTable()
 {
     for (uint i = 0; i < tableSize; i++)
@@ -116,7 +146,6 @@ int HashTable::hashFunction(string key)
 
 void HashTable::insertData(string key, int value)
 {
-
     if (getData(key) == -1)
     {
 
@@ -136,9 +165,10 @@ void HashTable::insertData(string key, int value)
             // if the index is not empty, then we need to find the next empty index
             // and insert the data there
             // quadratic probing
+            cout << "Collision occured" << endl;
             int index = hashedIndex;
             int i = 1;
-            while (dataArray[index] != 0)
+            while (dataArray[index] != NULL)
             {
                 index = (hashedIndex + i * i) % tableSize;
                 i++; // increase i to resolve collision
@@ -158,19 +188,34 @@ void HashTable::insertData(string key, int value)
 
 int HashTable::getData(string key)
 {
+
     int hashedIndex = hashFunction(key) % tableSize;
+
     // return -1 if not found
+
     if (dataArray[hashedIndex] == NULL)
+    {
         return -1;
+    }
     if (dataArray[hashedIndex]->key == key)
+    {
+
         return dataArray[hashedIndex]->data;
+    }
     else
     { // if collission
         // quadratic probing
+
         int index = hashedIndex;
         int i = 1;
-        while (dataArray[index]->key != key)
+
+        while (1)
         {
+            // run until we find the key
+            if (dataArray[index])
+                if (dataArray[index]->key == key)
+                    return dataArray[index]->data;
+
             index = (hashedIndex + i * i) % tableSize;
             i++;
 
@@ -178,8 +223,8 @@ int HashTable::getData(string key)
             if (i == tableSize)
                 return -1;
         }
-
-        return dataArray[index]->data;
+        if (dataArray[index])
+            return dataArray[index]->data;
     }
 }
 
@@ -211,17 +256,27 @@ void HashTable::deleteData(string key)
         int index = hashedIndex;
         int i = 1;
         // else prob until key matches
-        while (dataArray[index]->key != key)
+        while (1)
         {
+            // probe until key found
+            if (dataArray[index])
+                if (dataArray[index]->key == key)
+                    break;
             index = (hashedIndex + i * i) % tableSize;
             i++;
             // if i reached return
             if (i == tableSize)
                 return;
         }
-        // free memory and set null
-        delete dataArray[hashedIndex];
-        dataArray[hashedIndex] = NULL;
+
+        if (dataArray[index])
+            if (dataArray[index]->key == key)
+            {
+
+                // free memory and set null
+                delete dataArray[index];
+                dataArray[index] = NULL;
+            }
     }
 }
 
@@ -291,8 +346,13 @@ int HashTable::getData2(string key)
         // using double hashing
         int index = hashedIndex;
         int i = 1;
-        while (dataArray[index]->key != key)
+        while (1)
         {
+            // run until we find the key
+            if (dataArray[index])
+                if (dataArray[index]->key == key)
+                    return dataArray[index]->data;
+
             index = (hashFunction(key) + i * hashFunction2(key)) % tableSize;
             i++;
             // if i reached return
@@ -300,7 +360,9 @@ int HashTable::getData2(string key)
                 return -1;
         }
 
-        return dataArray[index]->data;
+        if (dataArray[index])
+            if (dataArray[index]->key == key)
+                return dataArray[index]->data;
     }
 }
 
@@ -319,17 +381,24 @@ void HashTable::deleteData2(string key)
         int index = hashedIndex;
         int i = 1;
 
-        while (dataArray[index]->key != key)
+        while (1)
         { // resolve using double hashing
-            index = (hashedIndex + i * i) % tableSize;
+            if (dataArray[index])
+                if (dataArray[index]->key == key)
+                    break;
+            index = (hashFunction(key) + i * hashFunction2(key)) % tableSize;
             i++;
             // if i reached return
             if (i == tableSize)
                 return;
         }
         // free memory and set null
+        if (dataArray[index])
+            if (dataArray[index]->key == key)
+            {
 
-        delete dataArray[hashedIndex];
-        dataArray[hashedIndex] = NULL;
+                delete dataArray[index];
+                dataArray[index] = NULL;
+            }
     }
 }
