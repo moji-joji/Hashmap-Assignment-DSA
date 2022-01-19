@@ -1,6 +1,5 @@
 #include <iostream>
 #define tableSize 10
-
 using namespace std;
 
 class DataNode
@@ -46,6 +45,10 @@ public:
     void deleteData2(string key);
 };
 
+void userInterface();
+
+// test quadratic probing 
+
 // int main()
 
 // {
@@ -81,39 +84,44 @@ public:
 //     return 0;
 // }
 
+ 
+// test double hashing
+// int main() 
+// {
+// 	// table2 for double hashing 
+//     HashTable table2; 
+ 
+ 
+// 	table2.insertData2("man", 7); 
+// 	table2.insertData2("car", 8); 
+// 	table2.insertData2("war", 9); 
+// 	table2.insertData2("food", 10); 
+// 	table2.insertData2("tree", 11); 
+// 	table2.insertData2("break", 12); 
+ 
+ 
+//     cout << "Value of war in lexicon is " << table2.getData2("war") << endl; 
+// 	table2.printEntireTable(); 
+ 
+ 
+//     cout << "Deleting \'wae\'  " << endl; 
+// 	table2.deleteData2("war"); 
+ 
+ 
+// 	table2.printEntireTable(); 
+ 
+ 
+//     cout << endl; 
+//     return 0; 
+// } 
+ 
+
+
 int main()
 
 {
 
-    // table 1 for quadratic probing
-
-    HashTable table1;
-
-    // table2 for double hashing
-
-    HashTable table2;
-
-    table2.insertData2("man", 7);
-
-    table2.insertData2("car", 8);
-
-    table2.insertData2("war", 9);
-
-    table2.insertData2("food", 10);
-
-    table2.insertData2("tree", 11);
-
-    table2.insertData2("break", 12);
-
-    cout << "Value of war in lexicon is " << table2.getData2("war") << endl;
-
-    table2.printEntireTable();
-
-    cout << "Deleting \'war\'  " << endl;
-
-    table2.deleteData2("war");
-
-    table2.printEntireTable();
+    userInterface();
 
     cout << endl;
 
@@ -402,3 +410,122 @@ void HashTable::deleteData2(string key)
             }
     }
 }
+
+void userInterface()
+{
+    int choice;
+    HashTable ht;
+    cout << "Welcome" << endl;
+    cout << "Press -9999 at any time to exit" << endl;
+
+    cout << "Choose resolution technique" << endl;
+    
+    // choose the reolution method
+    cout << "1. Quadratic probing" << endl;
+    cout << "2. Double hashing" << endl;
+    cin >> choice;
+    if (choice != -9999)
+    {
+        if (choice == 1)
+        {
+            while (1)
+            {   
+                cout << "Quadratic Probing" << endl;
+                cout << "1. Insert Value" << endl;
+                cout << "2. Get Value" << endl;
+                cout << "3. Delete Value" << endl;
+                cout << "4. Print All" << endl;
+
+                // choose command accordingly
+                cin >> choice;
+                if (choice == -9999)
+                    break;
+                if (choice == 1)
+                {
+                    string key;
+                    int value;
+                    cout << "Enter key" << endl;
+                    cin >> key;
+                    cout << "Enter value" << endl;
+                    cin >> value;
+                    ht.insertData(key, value);
+                }
+                else if (choice == 2)
+                {
+                    string key;
+                    cout << "Enter key" << endl;
+                    cin >> key;
+                    cout << "Value is " << ht.getData(key) << endl;
+                }
+                else if (choice == 3)
+                {
+                    string key;
+                    cout << "Enter key" << endl;
+                    cin >> key;
+                    ht.deleteData(key);
+                }
+                else if (choice == 4)
+                {
+                    ht.printEntireTable();
+                }
+                else
+                {
+                    cout << "Invalid choice. Try again" << endl;
+                }
+            }
+        }
+        else if (choice == 2)
+        { while(1){
+                // choose command accordingly
+
+            cout << "Double Hashing" << endl;
+            cout << "1. Insert Value" << endl;
+            cout << "2. Get Value" << endl;
+            cout << "3. Delete Value" << endl;
+            cout << "4. Print All" << endl;
+
+            cin >> choice;
+            if (choice == -9999)
+                return;
+            if (choice == 1)
+            {
+                string key;
+                int value;
+                cout << "Enter key" << endl;
+                cin >> key;
+                cout << "Enter value" << endl;
+                cin >> value;
+                ht.insertData2(key, value);
+            }
+            else if (choice == 2)
+            {
+                string key;
+                cout << "Enter key" << endl;
+                cin >> key;
+                cout << "Value is " << ht.getData2(key) << endl;
+            }
+            else if (choice == 3)
+            {
+                string key;
+                cout << "Enter key" << endl;
+                cin >> key;
+                ht.deleteData2(key);
+            }
+            else if (choice == 4)
+            {
+                ht.printEntireTable();
+            }
+            else
+            {
+                cout << "Invalid choice. Try again" << endl;
+            }
+        }
+        }
+    }
+    else
+    {
+        return;
+    }
+}
+
+
